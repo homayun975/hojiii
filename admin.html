@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body style="background:#111; color:white; text-align:center;">
+
+<h2>📁 Photos</h2>
+<button onclick="load()">Refresh</button>
+
+<div id="gallery"></div>
+
+<script>
+function load() {
+  fetch("/images")
+    .then(res => res.json())
+    .then(files => {
+      const div = document.getElementById("gallery");
+      div.innerHTML = "";
+
+      files.forEach(f => {
+        const img = document.createElement("img");
+        img.src = "/uploads/" + f;
+        img.width = 200;
+        img.style.margin = "10px";
+        div.appendChild(img);
+      });
+    });
+}
+
+load();
+</script>
+
+</body>
+</html>

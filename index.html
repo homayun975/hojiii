@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body style="text-align:center; background:#111; color:white;">
+
+<h2>📷 Camera</h2>
+
+<video id="video" autoplay width="300"></video><br>
+<button onclick="startCamera()">Start</button>
+<button onclick="takePhoto()">Capture</button>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<script>
+function startCamera() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      document.getElementById("video").srcObject = stream;
+    });
+}
+
+function takePhoto() {
+  const video = document.getElementById("video");
+  const canvas = document.getElementById("canvas");
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(video, 0, 0);
+
+  const image = canvas.toDataURL("image/png");
+
+  fetch("/upload", {
+    method: "POST",
+    body: image
+  });
+}
+</script>
+
+</body>
+</html>
